@@ -1,4 +1,10 @@
-##cvm 操作
+## cvm 操作
+
+#
+```bash
+pip install tencentcloud-sdk-python
+
+```
 
 ### 1. 查询cvm 
 
