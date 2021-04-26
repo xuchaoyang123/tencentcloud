@@ -120,7 +120,7 @@ try:
 
     req = models.TerminateInstancesRequest()
     params = {
-        "InstanceIds": [ "ins-ddptrqhy" ]                   #一个或多个待操作的实例ID。可通过DescribeInstances接口返回值中的InstanceId获取。每次请求批量实例的上限为100。
+        "InstanceIds": [ "ins-n0zckf1q","ins-5n2gcnpg"]         #一个或多个待操作的实例ID。可通过DescribeInstances接口返回值中的InstanceId获取。每次请求批量实例的上限为100。
     }
     req.from_json_string(json.dumps(params))
 
@@ -130,5 +130,6 @@ try:
 except TencentCloudSDKException as err: 
     print(err) 
 
-
+#结果输出:
+#{"RequestId": "119a0fe6-e3b4-4e2c-b97a-eeebf740d1a6"}
 ```
