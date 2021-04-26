@@ -39,7 +39,7 @@ try:
         },
         "InstanceName": "redis-",
         "LoginSettings": {
-            "Password": "Tcdn@2007!"
+            "Password": "设置cvm的密码"
         },
         "SecurityGroupIds": [ "sg-k7s7zjnq" ],
         "InstanceCount": 8,
