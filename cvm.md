@@ -80,7 +80,7 @@ try:
     req.from_json_string(json.dumps(params))
 
     resp = client.RunInstances(req) 
-    print(resp.to_json_string()) 
+    print(resp.to_json_string(indent=2)) 
 
 except TencentCloudSDKException as err: 
     print(err) 
@@ -94,6 +94,33 @@ except TencentCloudSDKException as err:
 
 ### 3. 删除cvm
 ```py
+
+import json
+from tencentcloud.common import credential
+from tencentcloud.common.profile.client_profile import ClientProfile
+from tencentcloud.common.profile.http_profile import HttpProfile
+from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
+from tencentcloud.cvm.v20170312 import cvm_client, models
+try: 
+    cred = credential.Credential("SecretId", "SecretKey") 
+    httpProfile = HttpProfile()
+    httpProfile.endpoint = "cvm.tencentcloudapi.com"
+
+    clientProfile = ClientProfile()
+    clientProfile.httpProfile = httpProfile
+    client = cvm_client.CvmClient(cred, "ap-nanjing", clientProfile) 
+
+    req = models.TerminateInstancesRequest()
+    params = {
+        "InstanceIds": [ "ins-ddptrqhy" ]                   #一个或多个待操作的实例ID。可通过DescribeInstances接口返回值中的InstanceId获取。每次请求批量实例的上限为100。
+    }
+    req.from_json_string(json.dumps(params))
+
+    resp = client.TerminateInstances(req) 
+    print(resp.to_json_string()) 
+
+except TencentCloudSDKException as err: 
+    print(err) 
 
 
 ```
