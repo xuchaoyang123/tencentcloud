@@ -40,12 +40,7 @@ try:
 
     req = models.RunInstancesRequest()
     params = {
-        
-        #
-        #
-        
-        
-        
+   
         "InstanceChargeType": "POSTPAID_BY_HOUR",#PREPAID:预付费,即包年包月,POSTPAID_BY_HOUR:按小时后付费,CDHPAID：独享子机（基于专用宿主机创建，宿主机部分的资源不收费,SPOTPAID：竞价付费,默认值：POSTPAID_BY_HOUR。
         "Placement": {
             "Zone": "ap-nanjing-1",
@@ -57,23 +52,24 @@ try:
             "SubnetId": "subnet-punhzgeg",
             "Ipv6AddressCount": 0
         },
-        "InstanceType": "S5.2XLARGE16",                 #设置实例规格(几核几G)
+        "InstanceType": "SMALL1",                 #设置实例规格(几核几G) SMALL1:1核1GB,S5.SMALL2:1核2GB,S5.SMALL4:1核4GB,S5.MEDIUM4:2核4GB,S5.MEDIUM8:2核8GB,S5.LARGE8:4核8GB,S5.LARGE16:4核16GB,S5.2XLARGE16:8核16GB
+         
         "ImageId": "img-oikl1tzv",
         "SystemDisk": {
-            "DiskSize": 100,                            #设置磁盘大小.
+            "DiskSize": 100,                             #设置磁盘大小.
             "DiskType": "CLOUD_PREMIUM"
         },
         "InternetAccessible": {
-            "InternetMaxBandwidthOut": 98,              #设置启动时带宽大小.
+            "InternetMaxBandwidthOut": 98,                  #设置启动时带宽大小.
             "PublicIpAssigned": True,
             "InternetChargeType": "TRAFFIC_POSTPAID_BY_HOUR"
         },
-        "InstanceName": "redis-",
+        "InstanceName": "设置你想要的名字",                           #设置实例名称
         "LoginSettings": {
             "Password": "设置cvm的密码"
         },
-        "SecurityGroupIds": [ "sg-k7s7zjnq" ],
-        "InstanceCount": 8,                           #设置启动几个实例.
+        "SecurityGroupIds": [ "sg-k7s7zjnq" ],                 #这个安全组提前要创建出来
+        "InstanceCount": 1,                                    #设置启动几个实例.
         "EnhancedService": {
             "SecurityService": {
                 "Enabled": True
