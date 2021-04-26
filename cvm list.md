@@ -1,3 +1,23 @@
+##cvm 查询
+
+### 1. 查询cvm 官网资料
+
+```bash
+from tencentcloud.common import credential
+from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
+from tencentcloud.cvm.v20170312 import cvm_client, models
+try:
+    cred = credential.Credential("secretId", "secretKey")
+    client = cvm_client.CvmClient(cred, "ap-shanghai")
+    req = models.DescribeInstancesRequest()
+    resp = client.DescribeInstances(req)
+    print(resp.to_json_string())
+except TencentCloudSDKException as err:
+    print(err)
+```
+
+### 2. 查询cvm 详细信息
+```bash
 
 import os
 from tencentcloud.common import credential
@@ -71,4 +91,4 @@ try:
 
 except TencentCloudSDKException as err:
     print(err)
-
+```
