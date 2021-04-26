@@ -52,24 +52,24 @@ try:
             "SubnetId": "subnet-punhzgeg",
             "Ipv6AddressCount": 0
         },
-        "InstanceType": "SMALL1",                 #设置实例规格(几核几G) SMALL1:1核1GB,S5.SMALL2:1核2GB,S5.SMALL4:1核4GB,S5.MEDIUM4:2核4GB,S5.MEDIUM8:2核8GB,S5.LARGE8:4核8GB,S5.LARGE16:4核16GB,S5.2XLARGE16:8核16GB
+        "InstanceType": "SMALL1",                               #设置实例规格(几核几G) SMALL1:1核1GB,S5.SMALL2:1核2GB,S5.SMALL4:1核4GB,S5.MEDIUM4:2核4GB,S5.MEDIUM8:2核8GB,S5.LARGE8:4核8GB,S5.LARGE16:4核16GB,S5.2XLARGE16:8核16GB
          
         "ImageId": "img-oikl1tzv",
         "SystemDisk": {
-            "DiskSize": 100,                             #设置磁盘大小.
+            "DiskSize": 100,                                    #设置磁盘大小.
             "DiskType": "CLOUD_PREMIUM"
         },
         "InternetAccessible": {
-            "InternetMaxBandwidthOut": 98,                  #设置启动时带宽大小.
+            "InternetMaxBandwidthOut": 98,                      #设置启动时带宽大小.
             "PublicIpAssigned": True,
             "InternetChargeType": "TRAFFIC_POSTPAID_BY_HOUR"
         },
-        "InstanceName": "设置你想要的名字",                           #设置实例名称
+        "InstanceName": "设置你想要的名字",                        #设置实例名称
         "LoginSettings": {
-            "Password": "设置cvm的密码"
+            "Password": "设置cvm的密码"                           #设置登录密码
         },
-        "SecurityGroupIds": [ "sg-k7s7zjnq" ],                 #这个安全组提前要创建出来
-        "InstanceCount": 1,                                    #设置启动几个实例.
+        "SecurityGroupIds": [ "sg-k7s7zjnq" ],                  #这个安全组提前要创建出来
+        "InstanceCount": 1,                                     #设置启动几个实例.
         "EnhancedService": {
             "SecurityService": {
                 "Enabled": True
@@ -88,7 +88,7 @@ except TencentCloudSDKException as err:
     print(err) 
  
 #结果输出 
-#{"InstanceIdSet": ["ins-b7lh9jt6", "ins-p0thg5og", "ins-51t9ncem", "ins-c70r2hc4", "ins-acipnqjy", "ins-qccblnk4", "ins-ddptrqhy", "ins-36k7wdk8"], "RequestId": "c32988b6-fafa-4b4c-acc9-2fedaeed89cd"}
+#{"InstanceIdSet": ["ins-b7lh9jt6"], "RequestId": "c32988b6-fafa-4b4c-acc9-2fedaeed89cd"}
 
 
 ```
