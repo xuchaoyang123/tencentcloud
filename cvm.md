@@ -40,7 +40,13 @@ try:
 
     req = models.RunInstancesRequest()
     params = {
-        "InstanceChargeType": "POSTPAID_BY_HOUR",#（POSTPAID_BY_HOUR:按时收费,SPOTPAID:竞价实例)
+        
+        #
+        #
+        
+        
+        
+        "InstanceChargeType": "POSTPAID_BY_HOUR",#PREPAID:预付费,即包年包月,POSTPAID_BY_HOUR:按小时后付费,CDHPAID：独享子机（基于专用宿主机创建，宿主机部分的资源不收费,SPOTPAID：竞价付费,默认值：POSTPAID_BY_HOUR。
         "Placement": {
             "Zone": "ap-nanjing-1",
             "ProjectId": 0
@@ -51,14 +57,14 @@ try:
             "SubnetId": "subnet-punhzgeg",
             "Ipv6AddressCount": 0
         },
-        "InstanceType": "S5.2XLARGE16",
+        "InstanceType": "S5.2XLARGE16",                 #设置实例规格(几核几G)
         "ImageId": "img-oikl1tzv",
         "SystemDisk": {
-            "DiskSize": 100,
+            "DiskSize": 100,                            #设置磁盘大小.
             "DiskType": "CLOUD_PREMIUM"
         },
         "InternetAccessible": {
-            "InternetMaxBandwidthOut": 98,
+            "InternetMaxBandwidthOut": 98,              #设置启动时带宽大小.
             "PublicIpAssigned": True,
             "InternetChargeType": "TRAFFIC_POSTPAID_BY_HOUR"
         },
@@ -67,7 +73,7 @@ try:
             "Password": "设置cvm的密码"
         },
         "SecurityGroupIds": [ "sg-k7s7zjnq" ],
-        "InstanceCount": 8,
+        "InstanceCount": 8,                           #设置启动几个实例.
         "EnhancedService": {
             "SecurityService": {
                 "Enabled": True
