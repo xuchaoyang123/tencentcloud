@@ -22,8 +22,8 @@ try:
     #print("InstanceName|InstanceId|CPU|Memory|PrivateIpAddresses|PublicIpAddresses")  
     for x in a["InstanceSet"]:
             #print(str(x))
-            print("|"+str(x["InstanceName"]),"|"+str(x["InstanceId"]),"|"+str(x["CPU"]),"|"+str(x["Memory"]),"|"+str(x["PrivateIpAddresses"]),"|"+str(x["PublicIpAddresses"])
-                  )
+                        print("|"+str(x["InstanceName"]),"|"+str(x["InstanceId"]),"|"+str(x["CPU"])+"C","|"+str(x["Memory"])+"G","|"+str(x["PrivateIpAddresses"]),"|"+str(x["PublicIpAddresses"]),"|"+str(x["SystemDisk"]["DiskSize"])+"GB")
+
   
 ```
 
