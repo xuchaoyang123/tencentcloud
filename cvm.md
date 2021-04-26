@@ -8,17 +8,23 @@ pip install tencentcloud-sdk-python
 ### 1. 查询cvm 
 
 ```py
+import json
 from tencentcloud.common import credential
 from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
 from tencentcloud.cvm.v20170312 import cvm_client, models
 try:
-    cred = credential.Credential("secretId", "secretKey")
-    client = cvm_client.CvmClient(cred, "ap-shanghai")
+    cred = credential.Credential("$secretId", "$secretKey")
+    client = cvm_client.CvmClient(cred, "ap-nanjing")
     req = models.DescribeInstancesRequest()
     resp = client.DescribeInstances(req)
-    print(resp.to_json_string())
-except TencentCloudSDKException as err:
-    print(err)
+    t = resp.to_json_string()
+    a = json.loads(t)  
+    #print("InstanceName|InstanceId|CPU|Memory|PrivateIpAddresses|PublicIpAddresses")  
+    for x in a["InstanceSet"]:
+            #print(str(x))
+            print("|"+str(x["InstanceName"]),"|"+str(x["InstanceId"]),"|"+str(x["CPU"]),"|"+str(x["Memory"]),"|"+str(x["PrivateIpAddresses"]),"|"+str(x["PublicIpAddresses"])
+                  )
+  
 ```
 
 ### 2. 创建cvm
@@ -41,7 +47,7 @@ try:
     req = models.RunInstancesRequest()
     params = {
    
-        "InstanceChargeType": "POSTPAID_BY_HOUR",#PREPAID:预付费,即包年包月,POSTPAID_BY_HOUR:按小时后付费,CDHPAID：独享子机（基于专用宿主机创建，宿主机部分的资源不收费,SPOTPAID：竞价付费,默认值：POSTPAID_BY_HOUR。
+        "InstanceChargeType": "SPOTPAID",#PREPAID:预付费,即包年包月,POSTPAID_BY_HOUR:按小时后付费,CDHPAID：独享子机（基于专用宿主机创建，宿主机部分的资源不收费,SPOTPAID：竞价付费,默认值：POSTPAID_BY_HOUR。
         "Placement": {
             "Zone": "ap-nanjing-1",
             "ProjectId": 0
@@ -52,7 +58,7 @@ try:
             "SubnetId": "subnet-punhzgeg",
             "Ipv6AddressCount": 0
         },
-        "InstanceType": "SMALL1",                               #设置实例规格(几核几G) SMALL1:1核1GB,S5.SMALL2:1核2GB,S5.SMALL4:1核4GB,S5.MEDIUM4:2核4GB,S5.MEDIUM8:2核8GB,S5.LARGE8:4核8GB,S5.LARGE16:4核16GB,S5.2XLARGE16:8核16GB
+        "InstanceType": "S5.SMALL2",                               #设置实例规格(几核几G) SMALL1:1核1GB,S5.SMALL2:1核2GB,S5.SMALL4:1核4GB,S5.MEDIUM4:2核4GB,S5.MEDIUM8:2核8GB,S5.LARGE8:4核8GB,S5.LARGE16:4核16GB,S5.2XLARGE16:8核16GB
          
         "ImageId": "img-oikl1tzv",
         "SystemDisk": {
