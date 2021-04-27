@@ -26,6 +26,9 @@ try:
 except TencentCloudSDKException as err:
     print(err)
 
+#输出结果
+#|设置你想要的名字 |ins-ivbhyiw8 |1C 2G |10.206.0.14 |118.195.xx.xx |100GB |RUNNING
+
   
 ```
 
