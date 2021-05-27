@@ -108,32 +108,48 @@ except TencentCloudSDKException as err:
 ### 3. 删除cvm
 ```py
 
+
+# 删除
 import json
 from tencentcloud.common import credential
 from tencentcloud.common.profile.client_profile import ClientProfile
 from tencentcloud.common.profile.http_profile import HttpProfile
 from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
 from tencentcloud.cvm.v20170312 import cvm_client, models
-try: 
-    cred = credential.Credential("SecretId", "SecretKey") 
+try:
+    cred = credential.Credential( "$secretId", "$secretKey") 
+       
     httpProfile = HttpProfile()
     httpProfile.endpoint = "cvm.tencentcloudapi.com"
 
     clientProfile = ClientProfile()
     clientProfile.httpProfile = httpProfile
-    client = cvm_client.CvmClient(cred, "ap-nanjing", clientProfile) 
+    client = cvm_client.CvmClient(cred, "ap-nanjing", clientProfile)
 
+# 将现有的cvm id加入到列表[]中
+    query1 = []
+    query = models.DescribeInstancesRequest()
+    resp = client.DescribeInstances(query)
+    t = resp.to_json_string()
+    a = json.loads(t)
+    for x in a["InstanceSet"]:
+        query1.append(str(x["InstanceId"]))
+
+# 进行批量删除
     req = models.TerminateInstancesRequest()
     params = {
-        "InstanceIds": [ "ins-n0zckf1q","ins-5n2gcnpg"]         #一个或多个待操作的实例ID。可通过DescribeInstances接口返回值中的InstanceId获取。每次请求批量实例的上限为100。
+        # 一个或多个待操作的实例ID。可通过DescribeInstances接口返回值中的InstanceId获取。每次请求批量实例的上限为100。
+        "InstanceIds": query1
+
     }
     req.from_json_string(json.dumps(params))
 
-    resp = client.TerminateInstances(req) 
-    print(resp.to_json_string()) 
+    resp = client.TerminateInstances(req)
+    print(resp.to_json_string())
 
-except TencentCloudSDKException as err: 
-    print(err) 
+except TencentCloudSDKException as err:
+    print(err)
+
 
 #结果输出:
 #{"RequestId": "119a0fe6-e3b4-4e2c-b97a-eeebf740d1a6"}
