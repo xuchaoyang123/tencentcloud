@@ -155,3 +155,44 @@ except TencentCloudSDKException as err:
 #结果输出:
 #cvm:  ['ins-r2sxub5s', 'ins-pgjeh5c6'] 已删除成功,共计:  2
 ```
+
+
+
+### 4.查询余额
+```py
+
+import json
+from tencentcloud.common import credential
+from tencentcloud.common.profile.client_profile import ClientProfile
+from tencentcloud.common.profile.http_profile import HttpProfile
+from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
+from tencentcloud.billing.v20180709 import billing_client, models
+
+
+def GetAccout(ak, aks):
+    try:
+        cred = credential.Credential(ak, aks)
+        httpProfile = HttpProfile()
+        httpProfile.endpoint = "billing.tencentcloudapi.com"
+
+        clientProfile = ClientProfile()
+        clientProfile.httpProfile = httpProfile
+        client = billing_client.BillingClient(cred, "", clientProfile)
+
+        req = models.DescribeAccountBalanceRequest()
+        params = {
+
+        }
+        req.from_json_string(json.dumps(params))
+
+        resp = client.DescribeAccountBalance(req)
+        print("腾讯云账户余额: ", resp.__dict__["Balance"]/float(100), "元")
+
+    except TencentCloudSDKException as err:
+        print(err)
+
+
+GetAccout("$ak",
+          "$sk")
+
+```
