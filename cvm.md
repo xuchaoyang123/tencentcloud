@@ -145,12 +145,13 @@ try:
     req.from_json_string(json.dumps(params))
 
     resp = client.TerminateInstances(req)
-    print(resp.to_json_string())
+    #print(resp.to_json_string())
+    print("cvm: ", query1, "已删除成功,共计: ", len(query1))
 
 except TencentCloudSDKException as err:
     print(err)
 
 
 #结果输出:
-#{"RequestId": "119a0fe6-e3b4-4e2c-b97a-eeebf740d1a6"}
+#cvm:  ['ins-r2sxub5s', 'ins-pgjeh5c6'] 已删除成功,共计:  2
 ```
