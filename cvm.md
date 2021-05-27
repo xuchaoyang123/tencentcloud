@@ -105,7 +105,7 @@ except TencentCloudSDKException as err:
 ```
 
 
-### 3. 删除cvm
+### 3. 批量删除cvm
 ```py
 
 
