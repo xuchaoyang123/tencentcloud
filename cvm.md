@@ -201,7 +201,8 @@ GetAccout("$ak",
 ```
 
 ### 集合版
-、、、
+、、、py
+
 #!/Users/carl/anaconda3/envs/cvm_py3.9/bin/python
 
 import json
@@ -400,8 +401,6 @@ class Cvm:
         except TencentCloudSDKException as err:
             print(err)
 
-
-
 if __name__ == '__main__':
     c1 = Cvm()
     if  sys.argv[1] == "l" or sys.argv[1] == "L" or sys.argv[1] == "list"  or sys.argv[1] == "List" or  sys.argv[1] == "LIST" :
@@ -410,5 +409,4 @@ if __name__ == '__main__':
         c1.DeleCvm()
     elif sys.argv[1] == "a" or sys.argv[1] == "A" or sys.argv[1] == "add" or sys.argv[1] == "ADD" or sys.argv[1] == "Add":
         c1.CreateCvm()
-
 、、、
