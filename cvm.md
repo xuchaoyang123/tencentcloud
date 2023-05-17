@@ -201,10 +201,10 @@ GetAccout("$ak",
 ```
 
 ### 集合版
-、、、py
+``` py
+
 
 #!/Users/carl/anaconda3/envs/cvm_py3.9/bin/python
-
 import json
 import sys
 from tencentcloud.common.profile.client_profile import ClientProfile
@@ -409,4 +409,4 @@ if __name__ == '__main__':
         c1.DeleCvm()
     elif sys.argv[1] == "a" or sys.argv[1] == "A" or sys.argv[1] == "add" or sys.argv[1] == "ADD" or sys.argv[1] == "Add":
         c1.CreateCvm()
-、、、
+```
