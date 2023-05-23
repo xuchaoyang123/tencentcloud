@@ -200,11 +200,10 @@ GetAccout("$ak",
 #腾讯云账户余额:  113.53 元
 ```
 
-### 集合版
+### 完整版
 ``` py
-
-
 #!/Users/carl/anaconda3/envs/cvm_py3.9/bin/python
+
 import json
 import sys
 from tencentcloud.common.profile.client_profile import ClientProfile
@@ -216,13 +215,10 @@ from tencentcloud.cvm.v20170312 import cvm_client,models as cvm_models
 from tencentcloud.billing.v20180709 import billing_client, models as billing_models
 
 
-#cvm.py add 4c8g200 3
-#cvm.py del
-#cvm.py list
 
 class Cvm:
-    SecretId = "xxxxxx"
-    SecretKey = "xxxxxxx"
+    SecretId = "xxxxx"
+    SecretKey = "xxxxx"
     Region = "ap-nanjing"
     Zone = "ap-nanjing-1"
     InstanceChargeType = "SPOTPAID"  # 竞价付费
@@ -234,34 +230,31 @@ class Cvm:
 
     # InstanceCount = 1  # 默认创建1个实例
     # InstanceType = "S5.LARGE8" #4c8g
-    # DiskSize=200 # 磁盘大小
+    #DiskSize=200 # 磁盘大小
 
 
     if not len(sys.argv) <=2:
         Size = sys.argv[2]  # 2
 
-        DiskSize = int(Size[Size.find('g') + 1:])  # 磁盘大小
-
-        if Size[:Size.find('g') + 1] == "1c1g":  # SMALL1:1核1GB
-            InstanceType = "SMALL1"
-        elif Size[:Size.find('g') + 1] == "1c2g":  # S5.SMALL2:1核2GB
-            InstanceType = "S5.SMALL2"
-        elif Size[:Size.find('g') + 1] == "1c4g":  # S5.SMALL4:1核4GB
-            InstanceType = "S5.SMALL4"
-        elif Size[:Size.find('g') + 1] == "1c4g":  # S5.MEDIUM4: 2核4GB
-            InstanceType = "S5.MEDIUM4"
-        elif Size[:Size.find('g') + 1] == "2c8g":  #S5.MEDIUM8:2核8GB
-            InstanceType = "S5.MEDIUM8"
-        elif Size[:Size.find('g') + 1] == "4c8g":  # S5.LARGE8:4核8GB
-            InstanceType = "S5.LARGE8"
-        elif Size[:Size.find('g') + 1] == "4c16g":  # S5.LARGE16:4核16GB
-            InstanceType = "S5.LARGE16"
-        elif Size[:Size.find('g') + 1] == "8c16g":  # S5.2XLARGE16:8核16GB
-            InstanceType = "S5.2XLARGE16"
+        if Size[Size.find('g') + 1:] == "":
+            DiskSize = 100 #如果磁盘不写默认为空,则设置100G
         else:
-            InstanceType = "S5.LARGE8"
+            DiskSize = int(Size[Size.find('g') + 1:])  # 磁盘大小
 
-
+        if Size[:Size.find('g') + 1] == "2c2g":  # SMALL1:1核1GB
+            InstanceType = "S6.MEDIUM2"
+        elif Size[:Size.find('g') + 1] == "2c4g":  # S5.SMALL2:1核2GB
+            InstanceType = "S6.MEDIUM4"
+        elif Size[:Size.find('g') + 1] == "2c8g":  # S5.SMALL4:1核4GB
+            InstanceType = "S6.MEDIUM8"
+        elif Size[:Size.find('g') + 1] == "4c8g":  # S5.MEDIUM4: 2核4GB
+            InstanceType = "S6.LARGE8"
+        elif Size[:Size.find('g') + 1] == "4c16g":  #S5.MEDIUM8:2核8GB
+            InstanceType = "S6.LARGE16"
+        elif Size[:Size.find('g') + 1] == "8c16g":  # S5.LARGE8:4核8GB
+            InstanceType = "S6.2XLARGE16"
+        else:
+            InstanceType = "S6.MEDIUM2"
 
     # 处理创建实例个数,如果为空默认创建一个实例,否则创建指定个数的实例
     if not len(sys.argv) <=3:
@@ -297,12 +290,18 @@ class Cvm:
             DisplayT = DisplayCredReqResp.to_json_string()
             DisplayA = json.loads(DisplayT)
             print("| InstanceName |  InstanceId  |CpuMem|  PrivateIp  |  PublicIp  | DiskSize | InstanceState ")
+            print("|--------------|--------------|------|-------------|------------|----------|---------------")
             for x in DisplayA["InstanceSet"]:
-                # print(str(x))
-                print("|" + str(x["InstanceName"]), "|" + str(x["InstanceId"]), "|" + str(x["CPU"]) + "C",
-                      "" + str(x["Memory"]) + "G", "|" + str(x["PrivateIpAddresses"][0]),
-                      "|" + str(x["PublicIpAddresses"][0]), "|" + str(x["SystemDisk"]["DiskSize"]) + "GB",
-                      "|" + str(x["InstanceState"]))
+                instance_name = str(x.get("InstanceName", ""))
+                instance_id = str(x.get("InstanceId", ""))
+                cpu = str(x.get("CPU", "")) + "C"
+                memory = str(x.get("Memory", "")) + "G"
+                private_ip = str(x.get("PrivateIpAddresses", [""])[0]) if x.get("PrivateIpAddresses") else ""
+                public_ip = str(x.get("PublicIpAddresses", [""])[0]) if x.get("PublicIpAddresses") else ""
+                disk_size = str(x.get("SystemDisk", {}).get("DiskSize", "")) + "GB" if x.get("SystemDisk") else ""
+                instance_state = str(x.get("InstanceState", ""))
+                print("|" + instance_name, "|" + instance_id, "|" + cpu, memory, "|" + private_ip,
+                      "|" + public_ip, "|" + disk_size, "|" + instance_state)
         except TencentCloudSDKException as err:
             print(err)
 
@@ -319,23 +318,25 @@ class Cvm:
             # 将现有的cvm id加入到列表[]中
             query1 = []
             query = cvm_models.DescribeInstancesRequest()
+            # 进行批量删除
             resp = client.DescribeInstances(query)
             t = resp.to_json_string()
             a = json.loads(t)
             for x in a["InstanceSet"]:
-                query1.append(str(x["InstanceId"]))
+                if x["InstanceState"] != "TERMINATING":
+                    query1.append(str(x["InstanceId"]))
+            if query1:
+                req = cvm_models.TerminateInstancesRequest()
+                params = {
+                    # 一个或多个待操作的实例ID。可通过DescribeInstances接口返回值中的InstanceId获取。每次请求批量实例的上限为100。
+                    "InstanceIds": query1
+                }
+                req.from_json_string(json.dumps(params))
+                resp = client.TerminateInstances(req)
+                print("cvm: ", query1, "已删除成功,共计: ", len(query1))
+            else:
+                print("cvm: 没有要删除的实例。")
 
-            # 进行批量删除
-            req = cvm_models.TerminateInstancesRequest()
-            params = {
-                # 一个或多个待操作的实例ID。可通过DescribeInstances接口返回值中的InstanceId获取。每次请求批量实例的上限为100。
-                "InstanceIds": query1
-
-            }
-            req.from_json_string(json.dumps(params))
-            resp = client.TerminateInstances(req)
-                # print(resp.to_json_string())
-            print("cvm: ", query1, "已删除成功,共计: ", len(query1))
 
         except TencentCloudSDKException as err:
             print(err)
@@ -401,12 +402,51 @@ class Cvm:
         except TencentCloudSDKException as err:
             print(err)
 
+
+
 if __name__ == '__main__':
-    c1 = Cvm()
-    if  sys.argv[1] == "l" or sys.argv[1] == "L" or sys.argv[1] == "list"  or sys.argv[1] == "List" or  sys.argv[1] == "LIST" :
-        c1.ListCvm()
-    elif sys.argv[1]=="d" or sys.argv[1]=="D" or sys.argv[1]=="del" or sys.argv[1]=="Del" or sys.argv[1]=="DEL" or sys.argv[1]=="delete" :
-        c1.DeleCvm()
-    elif sys.argv[1] == "a" or sys.argv[1] == "A" or sys.argv[1] == "add" or sys.argv[1] == "ADD" or sys.argv[1] == "Add":
-        c1.CreateCvm()
+
+    if   len(sys.argv) == 1:
+        print("""
+                       腾讯公有云cvm快捷管理工具: [V1.0]
+                       
+                        configuration:
+                        vim cvm.py
+                             SecretId = "${ak}"         #配置公有云ak信息
+                             SecretKey = "${sk}"        #配置公有云sk信息
+                             
+                             
+
+                        optional arguments:
+
+                             l,L,list,List,LIST       打印当前az中的虚拟机列表(默认az:nanjing-1).
+                             d,D,del,Del,DEL,delete   删除当前az下的所有虚拟机.
+                             a,A,add,ADD,Add          根据配置创建指定大小的虚拟机.
+                             h         help
+
+
+                        Example:
+                            cvm l               #显示当前az下所有cvm.
+                            cvm list            #显示当前az下所有cvm.
+                            
+                            cvm a 2c2g100  2    #创建规格为: 2c2g磁盘100g的cvm,创建2台.
+                            cvm add 4c8g200 3   #创建规格为: 4c8g磁盘200g的cvm,创建3台.
+                            cvm add 4c8g        #创建规格为: 4c8g磁盘不写默认100G,台数不写默认1台.
+
+                            cvm del             #删除当前az下所有的: cvm.
+                       """)
+
+    else:
+        c1 = Cvm()
+        if sys.argv[1] == "l" or sys.argv[1] == "L" or sys.argv[1] == "list" or sys.argv[1] == "List" or sys.argv[
+            1] == "LIST":
+            c1.ListCvm()
+        elif sys.argv[1] == "d" or sys.argv[1] == "D" or sys.argv[1] == "del" or sys.argv[1] == "Del" or sys.argv[
+            1] == "DEL" or sys.argv[1] == "delete":
+            c1.DeleCvm()
+        elif sys.argv[1] == "a" or sys.argv[1] == "A" or sys.argv[1] == "add" or sys.argv[1] == "ADD" or sys.argv[
+            1] == "Add":
+            c1.CreateCvm()
+
+
 ```
